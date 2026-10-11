@@ -23,4 +23,4 @@ The matrix must be square and invertible.
 
 ## Status
 
-Archived learning material; not maintained. My current work is in [csv-quality-report](https://github.com/rodrix91/csv-quality-report).
+Archived learning material; not maintained. Current work is in [csv-quality-report](https://github.com/rodrix91/csv-quality-report) and [ops-field-brief](https://github.com/rodrix91/ops-field-brief).
