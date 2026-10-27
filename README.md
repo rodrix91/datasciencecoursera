@@ -33,4 +33,4 @@ The tests verify cached reuse, invalidation, independence of separate closures, 
 
 ## Status
 
-Historical learning material; original source preserved with only documentation and regression tests maintained. Current work is in [csv-quality-report](https://github.com/rodrix91/csv-quality-report) and [ops-field-brief](https://github.com/rodrix91/ops-field-brief).
+Historical learning material; original source preserved with only documentation and regression tests maintained. Current work is in [csv-quality-report](https://github.com/rodrix91/csv-quality-report), [ops-field-brief](https://github.com/rodrix91/ops-field-brief), and [inventory-policy-lab](https://github.com/rodrix91/inventory-policy-lab).
