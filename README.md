@@ -21,6 +21,16 @@ cacheSolve(m)  # prints "getting cached data" and returns the stored inverse
 
 The matrix must be square and invertible.
 
+## Automated verification
+
+The original assignment source remains unchanged. Run the [base-R regression suite](tests/run_tests.R) from the repository root:
+
+```bash
+Rscript --vanilla tests/run_tests.R
+```
+
+The tests verify cached reuse, invalidation, independence of separate closures, 1×1 and non-symmetric 3×3 matrices, failure handling and forwarding of `solve()` tolerance. [GitHub Actions](.github/workflows/r-tests.yml) runs these checks on Linux, Windows and macOS without additional R packages. This validates educational examples, not a production numerical library.
+
 ## Status
 
-Archived learning material; not maintained. Current work is in [csv-quality-report](https://github.com/rodrix91/csv-quality-report) and [ops-field-brief](https://github.com/rodrix91/ops-field-brief).
+Historical learning material; original source preserved with only documentation and regression tests maintained. Current work is in [csv-quality-report](https://github.com/rodrix91/csv-quality-report) and [ops-field-brief](https://github.com/rodrix91/ops-field-brief).
