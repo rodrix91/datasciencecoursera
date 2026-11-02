@@ -1,4 +1,6 @@
 makeCacheMatrix <- function(x = matrix()){
+      # Capture the matrix before the caller can change a lazy R argument.
+      force(x)
       inv <- NULL
       set <- function(y){
             x <<- y
