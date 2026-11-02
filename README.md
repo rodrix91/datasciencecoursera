@@ -23,14 +23,14 @@ The matrix must be square and invertible.
 
 ## Automated verification
 
-The original assignment source remains unchanged. Run the [base-R regression suite](tests/run_tests.R) from the repository root:
+The historical assignment is preserved, with a small correctness fix to evaluate the initial matrix immediately. Run the [base-R regression suite](tests/run_tests.R) from the repository root:
 
 ```bash
 Rscript --vanilla tests/run_tests.R
 ```
 
-The tests verify cached reuse, invalidation, independence of separate closures, 1×1 and non-symmetric 3×3 matrices, failure handling and forwarding of `solve()` tolerance. [GitHub Actions](.github/workflows/r-tests.yml) runs these checks on Linux, Windows and macOS without additional R packages. This validates educational examples, not a production numerical library.
+The tests verify cached reuse, invalidation, independence of separate closures, 1×1 and non-symmetric 3×3 matrices, failure handling, forwarding of `solve()` tolerance, and preservation of the initial matrix even if the caller changes its variable before the first read. [GitHub Actions](.github/workflows/r-tests.yml) runs these checks on Linux, Windows and macOS without additional R packages. This validates educational examples, not a production numerical library.
 
 ## Status
 
-Historical learning material; original source preserved with only documentation and regression tests maintained. Current work is in [csv-quality-report](https://github.com/rodrix91/csv-quality-report), [ops-field-brief](https://github.com/rodrix91/ops-field-brief), and [inventory-policy-lab](https://github.com/rodrix91/inventory-policy-lab).
+Historical learning material; the original assignment structure is preserved with minimal correctness fixes, documentation and regression tests. Current work is in [csv-quality-report](https://github.com/rodrix91/csv-quality-report), [ops-field-brief](https://github.com/rodrix91/ops-field-brief), and [inventory-policy-lab](https://github.com/rodrix91/inventory-policy-lab).
