@@ -62,4 +62,20 @@ stopifnot(inherits(tryCatch(cacheSolve(tolerant, tol = 0.5),
           is.null(tolerant$getInverse()))
 check_inverse(cacheSolve(tolerant, tol = 0), solve(tolerant$get(), tol = 0))
 
+# R evaluates function arguments lazily. A newly created cache must
+# preserve the matrix at construction time even before its first get().
+initial_source <- diag(c(3, 4))
+unread_cache <- makeCacheMatrix(initial_source)
+initial_source[1, 1] <- 99
+check_inverse(unread_cache$get(), diag(c(3, 4)))
+check_inverse(cacheSolve(unread_cache), diag(c(1 / 3, 1 / 4)))
+check_inverse(suppressMessages(cacheSolve(unread_cache)), unread_cache$getInverse())
+
+# Rebinding the caller's variable must not change an unread closure either.
+initial_reassigned <- diag(c(5, 6))
+unread_reassigned <- makeCacheMatrix(initial_reassigned)
+initial_reassigned <- diag(c(10, 12))
+check_inverse(unread_reassigned$get(), diag(c(5, 6)))
+check_inverse(cacheSolve(unread_reassigned), diag(c(1 / 5, 1 / 6)))
+
 cat("PASS: original R matrix caching, independence, dimensions and errors\n")
