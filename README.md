@@ -23,13 +23,13 @@ The matrix must be square and invertible.
 
 ## Automated verification
 
-The historical assignment is preserved, with a small correctness fix to evaluate the initial matrix immediately. Run the [base-R regression suite](tests/run_tests.R) from the repository root:
+The historical assignment retains its original four-accessor closure interface, with focused correctness fixes for lazy arguments and the cache key used by `solve()`. Run the [base-R regression suite](tests/run_tests.R) from the repository root:
 
 ```bash
 Rscript --vanilla tests/run_tests.R
 ```
 
-The tests verify cached reuse, invalidation, independence of separate closures, 1×1 and non-symmetric 3×3 matrices, failure handling, forwarding of `solve()` tolerance, and preservation of the initial matrix even if the caller changes its variable before the first read. [GitHub Actions](.github/workflows/r-tests.yml) runs these checks on Linux, Windows and macOS without additional R packages. This validates educational examples, not a production numerical library.
+The tests verify cached reuse, invalidation, independence of separate closures, 1×1 and non-symmetric 3×3 matrices, failure handling, argument-aware caching for `solve()` tolerance and right-hand sides, and snapshots of matrices and manual cache entries. [GitHub Actions](.github/workflows/r-tests.yml) runs these checks on Linux, Windows and macOS without additional R packages. This validates educational examples, not a production numerical library.
 
 ## Status
 
