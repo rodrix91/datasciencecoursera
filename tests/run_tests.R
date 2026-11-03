@@ -114,6 +114,23 @@ stopifnot(is.null(rhs_cache$getInverse()))
 check_inverse(cacheSolve(rhs_cache), solve(original))
 check_inverse(rhs_cache$getInverse(), solve(original))
 
+# Base R treats an explicit NULL b differently from an omitted b.
+# Failed named and positional NULL solves must not populate the inverse cache.
+null_cache <- makeCacheMatrix(original)
+named_null <- tryCatch(cacheSolve(null_cache, b = NULL), error = function(e) e)
+positional_null <- tryCatch(cacheSolve(null_cache, NULL), error = function(e) e)
+stopifnot(inherits(named_null, "error"),
+          inherits(positional_null, "error"),
+          is.null(null_cache$getInverse()))
+# A failed call must not overwrite an already valid cached inverse.
+null_inverse <- cacheSolve(null_cache)
+check_inverse(null_inverse, solve(original))
+cached_null_error <- tryCatch(cacheSolve(null_cache, b = NULL),
+                              error = function(e) e)
+stopifnot(inherits(cached_null_error, "error"))
+check_inverse(null_cache$getInverse(), null_inverse)
+check_inverse(suppressMessages(cacheSolve(null_cache)), null_inverse)
+
 # Lazy setter and manual inverse arguments must snapshot their inputs.
 replacement <- diag(c(3, 7))
 rhs_cache$set(replacement)
