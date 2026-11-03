@@ -78,4 +78,59 @@ initial_reassigned <- diag(c(10, 12))
 check_inverse(unread_reassigned$get(), diag(c(5, 6)))
 check_inverse(cacheSolve(unread_reassigned), diag(c(1 / 5, 1 / 6)))
 
+
+# Results computed with different solve() options must not share a cache.
+# A strict tolerance should still fail after a previously successful lenient solve.
+ill_conditioned <- diag(c(1, 1000))
+options_cache <- makeCacheMatrix(ill_conditioned)
+lenient <- cacheSolve(options_cache, tol = 0)
+check_inverse(lenient, solve(ill_conditioned, tol = 0))
+stopifnot(inherits(
+    tryCatch(cacheSolve(options_cache, tol = 0.5), error = function(e) e),
+    "error"
+))
+# The failed attempt must not overwrite the valid, matching cached entry.
+check_inverse(options_cache$getInverse(list(tol = 0)), lenient)
+stopifnot(is.null(options_cache$getInverse(list(tol = 0.5))))
+check_inverse(suppressMessages(cacheSolve(options_cache, tol = 0)), lenient)
+
+# A solve(A, b) solution is not the inverse: distinguish RHS values and
+# avoid exposing a RHS solution through the original getInverse() accessor.
+rhs_cache <- makeCacheMatrix(original)
+rhs_one <- cacheSolve(rhs_cache, b = c(3, 5))
+stopifnot(isTRUE(all.equal(rhs_one, solve(original, b = c(3, 5)))))
+stopifnot(is.null(rhs_cache$getInverse()))
+stopifnot(isTRUE(all.equal(
+    suppressMessages(cacheSolve(rhs_cache, b = c(3, 5))), rhs_one
+)))
+rhs_two <- cacheSolve(rhs_cache, b = c(7, 11))
+stopifnot(isTRUE(all.equal(rhs_two, solve(original, b = c(7, 11)))))
+stopifnot(!isTRUE(all.equal(rhs_one, rhs_two)), is.null(rhs_cache$getInverse()))
+positional <- cacheSolve(rhs_cache, c(3, 5))
+stopifnot(isTRUE(all.equal(positional, rhs_one)), is.null(rhs_cache$getInverse()))
+rhs_matrix <- diag(2)
+check_inverse(cacheSolve(rhs_cache, b = rhs_matrix), solve(original, b = rhs_matrix))
+stopifnot(is.null(rhs_cache$getInverse()))
+check_inverse(cacheSolve(rhs_cache), solve(original))
+check_inverse(rhs_cache$getInverse(), solve(original))
+
+# Lazy setter and manual inverse arguments must snapshot their inputs.
+replacement <- diag(c(3, 7))
+rhs_cache$set(replacement)
+replacement <- diag(c(99, 99))
+check_inverse(rhs_cache$get(), diag(c(3, 7)))
+stopifnot(is.null(rhs_cache$getInverse()))
+check_inverse(cacheSolve(rhs_cache), diag(c(1 / 3, 1 / 7)))
+manual_inverse <- diag(c(0.25, 0.5))
+rhs_cache$setInverse(manual_inverse)
+manual_inverse <- diag(c(9, 9))
+check_inverse(rhs_cache$getInverse(), diag(c(0.25, 0.5)))
+manual_args <- list(tol = 0)
+rhs_cache$setInverse(diag(c(0.25, 0.5)), manual_args)
+manual_args$tol <- 0.5
+check_inverse(rhs_cache$getInverse(list(tol = 0)), diag(c(0.25, 0.5)))
+stopifnot(is.null(rhs_cache$getInverse(list(tol = 0.5))))
+
+cat("PASS: solve options and RHS remain cache-safe; setters snapshot values\\n")
+
 cat("PASS: original R matrix caching, independence, dimensions and errors\n")
