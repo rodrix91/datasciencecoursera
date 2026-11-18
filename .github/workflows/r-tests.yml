@@ -24,7 +24,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        # Explicit Intel macOS allocation has been reliable for the sibling R coursework.
+        os: [ubuntu-latest, windows-latest, macos-15-intel]
     steps:
       - name: Check out original coursework and regression tests
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -36,3 +37,5 @@ jobs:
           r-version: release
       - name: Run checks without external R packages
         run: Rscript --vanilla tests/run_tests.R
+      - name: Verify complex inverses and right-hand-side isolation
+        run: Rscript --vanilla tests/complex_matrix_regressions.R
