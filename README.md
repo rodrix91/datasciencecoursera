@@ -27,9 +27,10 @@ The historical assignment retains its original four-accessor closure interface, 
 
 ```bash
 Rscript --vanilla tests/run_tests.R
+Rscript --vanilla tests/complex_matrix_regressions.R
 ```
 
-The tests verify cached reuse, invalidation, independence of separate closures, 1×1 and non-symmetric 3×3 matrices, failure handling, argument-aware caching for `solve()` tolerance and right-hand sides, and snapshots of matrices and manual cache entries. [GitHub Actions](.github/workflows/r-tests.yml) runs these checks on Linux, Windows and macOS without additional R packages. This validates educational examples, not a production numerical library. From the **Actions** tab, maintainers can also start these same read-only checks manually; newer commits on the same branch supersede unfinished runs, while other branches remain independent.
+The independent suites verify cached reuse, invalidation, independence of separate closures, 1×1 and non-symmetric 3×3 matrices, failure handling, argument-aware caching for `solve()` tolerance and right-hand sides, and snapshots of matrices and manual cache entries. Additional tests cover complex-valued inverses, complex vector and matrix right-hand sides, cache-key isolation, singular complex matrices and recovery after failure. [GitHub Actions](.github/workflows/r-tests.yml) runs these checks on Linux, Windows and macOS 15 Intel without additional R packages. This validates educational examples, not a production numerical library. From the **Actions** tab, maintainers can also start these same read-only checks manually; newer commits on the same branch supersede unfinished runs, while other branches remain independent.
 
 ## Status
 
